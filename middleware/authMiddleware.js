@@ -24,7 +24,7 @@ async function ensureAdmin(req, res, next) {
       if (res.locals.user.isAdmin) {
         return next()
       } else {
-        return res.status(403).send({ error: { status: 403, message: 'Access denied.' } });
+        return res.status(403).send({ error: { status: 403, message: 'Access denied. Must be an Admin to access.' } });
       }
     }
     return next();

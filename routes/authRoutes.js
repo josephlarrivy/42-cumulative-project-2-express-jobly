@@ -19,6 +19,7 @@ const { ensureAdmin } = require("../middleware/authMiddleware");
  *
  * Authorization required: none
  */
+
 router.get('/test', ensureAdmin, (req, res, next) => {
   return res.send('test')
 })
