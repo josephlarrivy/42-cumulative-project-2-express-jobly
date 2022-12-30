@@ -61,6 +61,24 @@ router.get("/", async (req, res, next) => {
       return next(e)
     }
 
+  } else if (req.query.minEmployees) {
+    let minEmployees = req.query.minEmployees;
+    try {
+      const result = await Company.filterNumEmployeesMin(minEmployees);
+      return res.json({ result });
+    } catch (e) {
+      return next(e)
+    }
+
+  } else if (req.query.maxEmployees) {
+    let maxEmployees = req.query.maxEmployees;
+    try {
+      const result = await Company.filterNumEmployeesMax(maxEmployees);
+      return res.json({ result });
+    } catch (e) {
+      return next(e)
+    }
+
   } else {
     try {
       const companies = await Company.findAll();

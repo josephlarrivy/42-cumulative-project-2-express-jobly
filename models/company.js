@@ -44,6 +44,49 @@ class Company {
     return company;
   }
 
+
+
+  /** Finter company names that contain input string.
+   *
+   * Returns [{ handle, name, description, numEmployees, logoUrl }, ...]
+   * */
+  static async search(input) {
+    const searchContain = await db.query(
+      `SELECT handle, name, description, num_employees AS "numEmployees", logo_url AS "logoUrl" FROM companies WHERE name ILIKE '%${input}%' ORDER BY name`
+    )
+    console.log(searchContain)
+    return searchContain.rows
+  }
+
+
+
+  /** Finter companies that have at least a certain number of employees.
+   *
+   * Returns [{ handle, name, description, numEmployees, logoUrl }, ...]
+   * */
+  static async filterNumEmployeesMin(input) {
+    const filterEmps = await db.query(
+      `SELECT handle, name, description, num_employees AS "numEmployees", logo_url AS "logoUrl" FROM companies WHERE num_employees >= ${input} ORDER BY name`
+    )
+    console.log(filterEmps)
+    return filterEmps.rows
+  }
+
+
+
+  /** Finter companies that have at most a certain number of employees.
+   *
+   * Returns [{ handle, name, description, numEmployees, logoUrl }, ...]
+   * */
+  static async filterNumEmployeesMax(input) {
+    const filterEmps = await db.query(
+      `SELECT handle, name, description, num_employees AS "numEmployees", logo_url AS "logoUrl" FROM companies WHERE num_employees <= ${input} ORDER BY name`
+    )
+    console.log(filterEmps)
+    return filterEmps.rows
+  }
+
+
   /** Find all companies.
    *
    * Returns [{ handle, name, description, numEmployees, logoUrl }, ...]
