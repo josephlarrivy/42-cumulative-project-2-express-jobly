@@ -11,6 +11,7 @@ const { createToken } = require("../helpers/tokens");
 const userAuthSchema = require("../schemas/userAuth.json");
 const userRegisterSchema = require("../schemas/userRegister.json");
 const { BadRequestError } = require("../expressError");
+const { ensureAdmin } = require("../middleware/authMiddleware");
 
 /** POST /auth/token:  { username, password } => { token }
  *
@@ -18,6 +19,10 @@ const { BadRequestError } = require("../expressError");
  *
  * Authorization required: none
  */
+router.get('/test', ensureAdmin, (req, res, next) => {
+  return res.send('test')
+})
+
 
 router.post("/token", async function (req, res, next) {
   try {

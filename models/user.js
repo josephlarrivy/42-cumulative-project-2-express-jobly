@@ -115,6 +115,26 @@ class User {
     return result.rows;
   }
 
+
+  /** Checks if a user is an admin.
+   *
+   * Returns boolean
+   **/
+  static async checkAdmin(username) {
+    console.log(username, '####')
+    const result = await db.query(
+      `SELECT is_admin FROM users where username = $1`, [username]
+    )
+    // console.log(result.rows[0].is_admin)
+    if (result.rows[0].is_admin === true) {
+      return true
+    } else {
+      return false
+    }
+  }
+
+
+
   /** Given a username, return data about user.
    *
    * Returns { username, first_name, last_name, is_admin, jobs }
