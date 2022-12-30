@@ -50,15 +50,13 @@ router.post("/", ensureLoggedIn, async function (req, res, next) {
  * Authorization required: none
  */
 
-router.get("/", async function (req, res, next) {
+router.get("/", async (req, res, next) => {
+  
   if (req.query.name) {
     let name = req.query.name;
     try {
-      
-
-
-
-      return res.send(name)
+      const result = await Company.search(name);
+      return res.json({ result });
     } catch (e) {
       return next(e)
     }
