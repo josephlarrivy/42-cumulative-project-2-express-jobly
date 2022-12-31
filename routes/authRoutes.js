@@ -21,7 +21,7 @@ const { ensureAdmin } = require("../middleware/authMiddleware");
  */
 
 router.get('/test', ensureAdmin, (req, res, next) => {
-  return res.send('test')
+  return res.send('test admin privileges')
 })
 
 
