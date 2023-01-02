@@ -22,6 +22,13 @@ class Job {
     return company;
   }
 
+  // gets all jobs
+  static async getAll() {
+    const response = await db.query(
+      `SELECT title, salary, equity, company_handle FROM jobs ORDER BY company_handle`
+    );
+    return response.rows;
+  }
 
   // gets all jobs by company handle
   static async get(handle) {

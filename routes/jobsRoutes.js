@@ -13,6 +13,20 @@ const router = new express.Router();
 // #########################
 
 
+
+// gets all jobs
+router.get("/", async (req, res, next) => {
+  try {
+    const jobs = await Job.getAll();
+    console.log(jobs)
+    return res.status(200).json({jobs})
+  } catch (e) {
+    next(e)
+  }
+})
+
+
+
 // posts a new job
 router.post('/create', async (req, res, next) => {
   try {
@@ -45,7 +59,7 @@ router.delete('/', async (req, res, next) => {
   try {
     const { title, company_handle } = req.body;
     const response = Job.delete(title, company_handle)
-    return res.status(202).json(response)
+    return res.status(202).json('deleted')
   } catch (e) {
     return next (e)
   }
