@@ -11,6 +11,7 @@ const Company = require("../models/company");
 
 const companyNewSchema = require("../schemas/companyNew.json");
 const companyUpdateSchema = require("../schemas/companyUpdate.json");
+const Job = require("../models/job");
 
 const router = new express.Router();
 
@@ -65,7 +66,7 @@ router.get("/", async (req, res, next) => {
       return next(e)
     }
 
-  } else if (req.query.minEmployees) {
+  } if (req.query.minEmployees) {
     let minEmployees = req.query.minEmployees;
     try {
       const result = await Company.filterNumEmployeesMin(minEmployees);
@@ -74,7 +75,7 @@ router.get("/", async (req, res, next) => {
       return next(e)
     }
 
-  } else if (req.query.maxEmployees) {
+  } if (req.query.maxEmployees) {
     let maxEmployees = req.query.maxEmployees;
     try {
       const result = await Company.filterNumEmployeesMax(maxEmployees);
@@ -102,9 +103,11 @@ router.get("/", async (req, res, next) => {
  */
 
 router.get("/:handle", async function (req, res, next) {
+  const { handle } = req.params
   try {
-    const company = await Company.get(req.params.handle);
-    return res.json({ company });
+    const company = await Company.get(handle);
+    const jobs = await Job.get(handle)
+    return res.json({ company, jobs });
   } catch (err) {
     return next(err);
   }

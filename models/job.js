@@ -41,6 +41,33 @@ class Job {
     return jobs;
   }
 
+  // filters by minimum salary
+  static async minSalary(input) {
+    const minSal = await db.query(
+      `SELECT company_handle, title, salary, equity FROM jobs WHERE salary >= $1 ORDER BY salary`, [input]
+    )
+    console.log(minSal);
+    return minSal.rows;
+  }
+
+  // returns job that have equity
+  static async hasEquity() {
+    const equity = await db.query(
+      `SELECT company_handle, title, salary, equity FROM jobs WHERE equity > 0 ORDER BY salary`,
+    )
+    console.log(equity);
+    return equity.rows;
+  }
+
+  // filters job titles by input string
+  static async search(input) {
+    const searchContain = await db.query(
+      `SELECT title, company_handle, salary, equity FROM jobs WHERE title ILIKE '%${input}%' ORDER BY salary`
+    )
+    console.log(searchContain);
+    return searchContain.rows;
+  }
+
   // deletes jobs by company handle and titile
   static async delete(title, company_handle) {
     const response = await db.query(

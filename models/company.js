@@ -54,8 +54,8 @@ class Company {
     const searchContain = await db.query(
       `SELECT handle, name, description, num_employees AS "numEmployees", logo_url AS "logoUrl" FROM companies WHERE name ILIKE '%${input}%' ORDER BY name`
     )
-    console.log(searchContain)
-    return searchContain.rows
+    console.log(searchContain);
+    return searchContain.rows;
   }
 
 
@@ -68,8 +68,8 @@ class Company {
     const filterEmps = await db.query(
       `SELECT handle, name, description, num_employees AS "numEmployees", logo_url AS "logoUrl" FROM companies WHERE num_employees >= ${input} ORDER BY name`
     )
-    console.log(filterEmps)
-    return filterEmps.rows
+    console.log(filterEmps);
+    return filterEmps.rows;
   }
 
 
