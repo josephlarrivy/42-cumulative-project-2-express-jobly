@@ -12,6 +12,7 @@ const {
   commonAfterEach,
   commonAfterAll,
   u1Token,
+  adminTestingToken,
 } = require("./_testCommon");
 
 beforeAll(commonBeforeAll);
@@ -81,7 +82,7 @@ describe("POST /users", function () {
           email: "new@email.com",
           isAdmin: true,
         });
-    expect(resp.statusCode).toEqual(401);
+    expect(resp.statusCode).toEqual(201);
   });
 
   test("bad request if missing data", async function () {
@@ -113,10 +114,10 @@ describe("POST /users", function () {
 /************************************** GET /users */
 
 describe("GET /users", function () {
-  test("works for users", async function () {
+  test("admin can get all users", async function () {
     const resp = await request(app)
         .get("/users")
-        .set("authorization", `Bearer ${u1Token}`);
+        .set("authorization", `Bearer ${adminTestingToken}`);
     expect(resp.body).toEqual({
       users: [
         {
@@ -157,7 +158,7 @@ describe("GET /users", function () {
     await db.query("DROP TABLE users CASCADE");
     const resp = await request(app)
         .get("/users")
-        .set("authorization", `Bearer ${u1Token}`);
+        .set("authorization", `Bearer ${adminTestingToken}`);
     expect(resp.statusCode).toEqual(500);
   });
 });
@@ -177,6 +178,7 @@ describe("GET /users/:username", function () {
         email: "user1@user.com",
         isAdmin: false,
       },
+      applications: []
     });
   });
 
@@ -271,7 +273,7 @@ describe("DELETE /users/:username", function () {
   test("works for users", async function () {
     const resp = await request(app)
         .delete(`/users/u1`)
-        .set("authorization", `Bearer ${u1Token}`);
+        .set("authorization", `Bearer ${adminTestingToken}`);
     expect(resp.body).toEqual({ deleted: "u1" });
   });
 
@@ -284,7 +286,7 @@ describe("DELETE /users/:username", function () {
   test("not found if user missing", async function () {
     const resp = await request(app)
         .delete(`/users/nope`)
-        .set("authorization", `Bearer ${u1Token}`);
+        .set("authorization", `Bearer ${adminTestingToken}`);
     expect(resp.statusCode).toEqual(404);
   });
 });

@@ -129,6 +129,15 @@ describe("findAll", function () {
   });
 });
 
+/************************************** checkadmin */
+
+describe("check admin", function () {
+  test("rejects if not admin", async function () {
+    let user = await User.get("u2");
+    expect(user.isAdmin).toEqual(false)
+  });
+});
+
 /************************************** get */
 
 describe("get", function () {

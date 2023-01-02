@@ -11,6 +11,8 @@ const User = require("../models/user");
 const { createToken } = require("../helpers/tokens");
 const userNewSchema = require("../schemas/userNew.json");
 const userUpdateSchema = require("../schemas/userUpdate.json");
+const jwt = require("jsonwebtoken");
+const { SECRET_KEY } = require("../config");
 
 const router = express.Router();
 
@@ -26,7 +28,7 @@ const router = express.Router();
  * Authorization required: login
  **/
 
-router.post("/", ensureLoggedIn, ensureAdmin, async function (req, res, next) {
+router.post("/", async function (req, res, next) {
   try {
     const validator = jsonschema.validate(req.body, userNewSchema);
     if (!validator.valid) {
@@ -67,12 +69,12 @@ router.get("/", ensureLoggedIn, ensureAdmin, async function (req, res, next) {
  * Authorization required: login
  **/
 
-router.get("/:username", ensureLoggedIn, ensureAdmin, async function (req, res, next) {
+router.get("/:username", ensureLoggedIn, async function (req, res, next) {
   try {
     const user = await User.get(req.params.username);
-    const appplications = await User.applications(req.params.username)
-    console.log(appplications)
-    return res.json({ user, appplications });
+    const applications = await User.applications(req.params.username)
+    console.log(applications)
+    return res.json({ user, applications });
   } catch (err) {
     return next(err);
   }
@@ -89,7 +91,21 @@ router.get("/:username", ensureLoggedIn, ensureAdmin, async function (req, res, 
  * Authorization required: login
  **/
 
-router.patch("/:username", ensureLoggedIn, ensureAdmin, async function (req, res, next) {
+
+router.patch("/:username", ensureLoggedIn, async (req, res, next) => {
+  try {
+    let { username } = req.params
+    let bearerToken = req.headers.authorization;
+    let token = bearerToken.replace("Bearer ", "");
+    let decoded = jwt.verify(token, SECRET_KEY)
+    if (username !== decoded.username) {
+      return res.status(404).json("cannot edit this user")
+    }
+    // return res.send("success")
+  } catch (e) {
+    return next(e)
+  }
+
   try {
     const validator = jsonschema.validate(req.body, userUpdateSchema);
     if (!validator.valid) {
@@ -102,7 +118,8 @@ router.patch("/:username", ensureLoggedIn, ensureAdmin, async function (req, res
   } catch (err) {
     return next(err);
   }
-});
+
+})
 
 
 /** DELETE /[username]  =>  { deleted: username }
