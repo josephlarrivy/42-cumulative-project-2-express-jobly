@@ -130,7 +130,12 @@ describe("GET /companies/:handle", function () {
         numEmployees: 1,
         logoUrl: "http://c1.img",
       },
-      "jobs": [],
+      "jobs": [{
+        "company_handle": "c1",
+        "equity": "0",
+        "salary": 90000,
+        "title": "test_job_1",
+      }],
     });
   });
 
@@ -144,7 +149,7 @@ describe("GET /companies/:handle", function () {
         numEmployees: 2,
         logoUrl: "http://c2.img",
       },
-      "jobs": [],
+      "jobs": []
     });
   });
 

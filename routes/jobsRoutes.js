@@ -40,7 +40,7 @@ router.get("/", async (req, res, next) => {
   try {
     const jobs = await Job.getAll();
     console.log(jobs)
-    return res.status(200).json({jobs})
+    return res.status(200).json(jobs)
   } catch (e) {
     next(e)
   }
