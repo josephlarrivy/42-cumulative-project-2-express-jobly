@@ -70,7 +70,9 @@ router.get("/", ensureLoggedIn, ensureAdmin, async function (req, res, next) {
 router.get("/:username", ensureLoggedIn, ensureAdmin, async function (req, res, next) {
   try {
     const user = await User.get(req.params.username);
-    return res.json({ user });
+    const appplications = await User.applications(req.params.username)
+    console.log(appplications)
+    return res.json({ user, appplications });
   } catch (err) {
     return next(err);
   }
@@ -116,6 +118,19 @@ router.delete("/:username", ensureLoggedIn, ensureAdmin, async function (req, re
     return next(err);
   }
 });
+
+
+// users can apply for a job
+router.post("/:username/jobs/:id", ensureLoggedIn, async (req, res, next) => {
+  console.log('###############')
+  let { username, id } = req.params;
+  try {
+    const apply = await User.apply(username, id);
+    return res.json({ "applied": apply.rows })
+  } catch (e) {
+    return next(e)
+  }
+})
 
 
 module.exports = router;

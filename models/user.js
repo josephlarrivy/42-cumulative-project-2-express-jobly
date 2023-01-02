@@ -121,7 +121,7 @@ class User {
    * Returns boolean
    **/
   static async checkAdmin(username) {
-    console.log(username, '####')
+    // console.log(username, '####')
     const result = await db.query(
       `SELECT is_admin FROM users where username = $1`, [username]
     )
@@ -133,7 +133,22 @@ class User {
     }
   }
 
+  // apply for a job
+  static async apply(username, id) {
+    const result = await db.query(
+      `INSERT INTO applications (username, job_id) VALUES ($1, $2) RETURNING username, job_id`, [username, id]
+    )
+    console.log(result)
+    return result;
+  }
 
+  // returns user's applications
+  static async applications (username) {
+    const result = await db.query(
+      `SELECT * FROM applications JOIN jobs ON applications.job_id = jobs.id WHERE applications.username = $1`, [username]
+    )
+    return(result.rows)
+  }
 
   /** Given a username, return data about user.
    *
