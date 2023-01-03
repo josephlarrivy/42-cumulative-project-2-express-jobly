@@ -32,17 +32,43 @@ describe("creating jobs", function () {
 })
 
 describe("getting jobs", function () {
+    const newJob = {
+        title: "test_job_2",
+        salary: 80000,
+        equity: "0",
+        company_handle: "c1"
+    };
+
     test("gets all jobs", async function () {
+        const job = await Job.create(newJob);
         const getJob = await Job.getAll();
-        expect(getJob).toEqual({
-            title: "test_job_1",
-            salary: 90000,
+        expect(getJob).toEqual([{
+            title: "test_job_2",
+            salary: 80000,
             equity: "0",
             company_handle: "c1",
-        })
+        }])
     })
 
-    // test("gets job by handle", async function () {
-    //     const 
-    // })
+    test("gets job by handle", async function () {
+        const job = await Job.create(newJob);
+        const getJob = await Job.get("c1");
+        expect(getJob).toEqual([{
+            title: "test_job_2",
+            salary: 80000,
+            equity: "0",
+            company_handle: "c1",
+        }])
+    })
+
+    test("gets job by title", async function () {
+        const job = await Job.create(newJob);
+        const getJob = await Job.search("test");
+        expect(getJob).toEqual([{
+            title: "test_job_2",
+            salary: 80000,
+            equity: "0",
+            company_handle: "c1",
+        }])
+    })
 })

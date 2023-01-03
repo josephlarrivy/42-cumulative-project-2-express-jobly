@@ -5,6 +5,6 @@ const { sqlForPartialUpdate } = require("../helpers/sql")
 describe("sqlForPartialUpdate test", function () {
     test("no data returns BadRequestError", function () {
         const data = sqlForPartialUpdate({})
-        expect(data).toThrow(error)
+        expect(data).toThrow()
     })
 })

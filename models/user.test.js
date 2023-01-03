@@ -7,12 +7,21 @@ const {
 } = require("../expressError");
 const db = require("../db.js");
 const User = require("./user.js");
+const Job = require("./job")
+const app = require("../app")
+const request = require("supertest");
+
+
 const {
   commonBeforeAll,
   commonBeforeEach,
   commonAfterEach,
   commonAfterAll,
+  u1Token,
+  adminTestingToken
 } = require("./_testCommon");
+
+// const { request } = require("../app");
 
 beforeAll(commonBeforeAll);
 beforeEach(commonBeforeEach);
@@ -217,6 +226,61 @@ describe("update", function () {
     }
   });
 });
+
+/************************************** apply */
+
+describe("tests applying for jobs", function () {
+  // const job = {
+  //   title: "test_job_4",
+  //   salary: 90000,
+  //   equity: 0,
+  //   company_handle: "c1"
+  // };
+  // let createJob = await Job.create(job)
+  // const newUser = {
+  //   username: "new",
+  //   firstName: "Test",
+  //   lastName: "Tester",
+  //   email: "test@test.com",
+  //   isAdmin: false,
+  // };
+  // let createUser = await User.register({
+  //   ...newUser,
+  //   password: "password"
+  // })
+
+  test("POST apply", async function () {
+    const job = {
+      title: "test_job_4",
+      salary: 90000,
+      equity: 0,
+      company_handle: "c1"
+    };
+    const response = await request(app)
+      .post("/jobs/create")
+      .send(job)
+      .set("authorization", `Bearer ${adminTestingToken}`);
+
+    // await User.apply("u1", 1);
+    const resp = await request(app)
+      .post("users/u1/jobs/1")
+
+    expect(resp.body).toEqual({
+      username: "test_apply",
+      job_id: 1
+    });
+  });
+
+  // test("not found if no such user", async function () {
+  //   try {
+  //     await User.remove("nope");
+  //     fail();
+  //   } catch (err) {
+  //     expect(err instanceof NotFoundError).toBeTruthy();
+  //   }
+  // });
+});
+
 
 /************************************** remove */
 
