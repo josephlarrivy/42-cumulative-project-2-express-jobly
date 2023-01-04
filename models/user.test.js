@@ -263,7 +263,7 @@ describe("tests applying for jobs", function () {
 
     // await User.apply("u1", 1);
     const resp = await request(app)
-      .post("users/u1/jobs/1")
+      .post("/users/u1/jobs/1")
 
     expect(resp.body).toEqual({
       username: "test_apply",
